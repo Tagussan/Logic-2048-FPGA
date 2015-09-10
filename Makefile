@@ -1,5 +1,5 @@
 MAIN = logic2048
-BENCH = tb_logic2048
+BENCH = tb_logic2048SingleLine
 SOURCES = *.v
 VERILOG = iverilog
 WAVE = gtkwave

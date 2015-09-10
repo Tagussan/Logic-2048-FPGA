@@ -3,10 +3,11 @@ module tb_logic2048SingleLine();
     parameter STEP = 20;
     reg [3:0] x0,x1,x2,x3;
     wire [3:0] y0,y1,y2,y3;
-    logic2048SingleLine md(x0,x1,x2,x3,y0,y1,y2,y3);
+    wire movable;
+    logic2048SingleLine md(x0,x1,x2,x3,y0,y1,y2,y3,movable);
     initial begin
         $dumpfile("logic2048.vcd");
-        $dumpvars(0, tb_logic2048);
+        $dumpvars(0, tb_logic2048SingleLine);
         x0 = 0;
         x1 = 0;
         x2 = 0;
