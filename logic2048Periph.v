@@ -1,3 +1,44 @@
+module fillEmptyCellBySeq(rst, clk, cell_all_in, cell_all_out, order_all, random, full, calc_done);
+    input [79:0] cell_all_in;
+    output [79:0] cell_all_out;
+    input [63:0] order_all;
+    input [5:0] random;
+    input clk, rst;
+    output full, calc_done;
+    reg [3:0] order_pos;
+    reg full;
+    reg calc_done;
+    reg [79:0] cell_all_out;
+    wire [4:0] selected_cell;
+    wire [3:0] current_pos;
+    wire [79:0] mask;
+    select5From80 bitsel1(.X_all(cell_all_in), .pos(current_pos), .ans(selected_cell));
+    select4From64 bitsel2(.X_all(order_all), .pos(order_pos), .ans(current_pos));
+    assign mask = {80{1'b1}} ^ (4'b1111 << (5*current_pos));
+    always @(posedge clk) begin
+        if(rst) begin
+            order_pos <= 0;
+            full <= 0;
+            calc_done <= 0;
+        end else begin
+            if(selected_cell == 0) begin
+                if(random == 0) begin
+                    cell_all_out <= (mask & cell_all_in) | (5'b00100 << (5*current_pos));
+                end else begin
+                    cell_all_out <= (mask & cell_all_in) | (5'b00010 << (5*current_pos));
+                end
+                calc_done <= 1;
+            end else begin
+                if(order_pos == 4'b1111) begin
+                    full <= 1;
+                end else begin
+                    order_pos <= order_pos + 1;
+                end
+            end
+        end
+    end
+endmodule
+
 module rotateBoard(X_all, Y_all, dir);
     input [79:0] X_all;
     input [1:0] dir;
@@ -75,7 +116,7 @@ module rotateBoard(X_all, Y_all, dir);
     end
 endmodule
 
-module undoRotateBoard(X_all, Y_all, dir);
+module unRotateBoard(X_all, Y_all, dir);
     input [79:0] X_all;
     input [1:0] dir;
     output reg [79:0] Y_all;

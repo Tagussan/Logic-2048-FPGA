@@ -1,19 +1,20 @@
-MAIN = logic2048
-BENCH = tb_logic2048SingleLine
+MAIN = restrectedMovSeq
+BENCH = tb_restrectedMovSeq
 SOURCES = *.v
 VERILOG = iverilog
 WAVE = gtkwave
 
 .PHONY: all
-all: $(TOP).vcd
+all: $(MAIN).out
 
-$(TOP).vcd:
-	$(VERILOG) -o $(MAIN).out -s $(BENCH) $(SOURCES)
+.PHONY: wave
+wave: $(MAIN).out
 	./$(MAIN).out
-
-wave: $(TOP).vcd
 	$(WAVE) $(MAIN).vcd > /dev/null 2>&1 &
+
+$(MAIN).out: $(SOURCES)
+	$(VERILOG) -o $(MAIN).out -s $(BENCH) $(SOURCES)
 
 .PHONY: clean
 clean:
-	rm -rf *.vcd $(MAIN).out
+	rm -rf *.vcd *.out
