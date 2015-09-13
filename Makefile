@@ -1,5 +1,5 @@
-MAIN = restrectedMovSeq
-BENCH = tb_restrectedMovSeq
+MAIN = fillEmptyCellBySeq
+BENCH = tb_fillEmptyCellBySeq
 SOURCES = *.v
 VERILOG = iverilog
 WAVE = gtkwave

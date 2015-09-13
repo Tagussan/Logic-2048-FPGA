@@ -20,6 +20,7 @@ module fillEmptyCellBySeq(rst, clk, cell_all_in, cell_all_out, order_all, random
             order_pos <= 0;
             full <= 0;
             calc_done <= 0;
+            cell_all_out <= 0;
         end else begin
             if(selected_cell == 0) begin
                 if(random == 0) begin
