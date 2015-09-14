@@ -439,6 +439,11 @@ module logic2048SingleLine(x0, x1, x2, x3, y0, y1, y2, y3, movable);
             y2 <= 0;
             y3 <= 0;
             movable <= 1;
+        end else begin
+            y0 <= 31;
+            y1 <= 31;
+            y2 <= 31;
+            y3 <= 31;
         end
     end
 endmodule
