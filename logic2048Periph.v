@@ -21,7 +21,7 @@ module fillEmptyCellBySeq(rst, clk, cell_all_in, cell_all_out, order_all, random
             full <= 0;
             calc_done <= 0;
             cell_all_out <= 0;
-        end else begin
+        end else if(calc_done == 0) begin
             if(selected_cell == 0) begin
                 if(random == 0) begin
                     cell_all_out <= (mask & cell_all_in) | (5'b00100 << (5*current_pos));
@@ -36,8 +36,26 @@ module fillEmptyCellBySeq(rst, clk, cell_all_in, cell_all_out, order_all, random
                     order_pos <= order_pos + 1;
                 end
             end
+        end else begin
+            //calculation done
         end
     end
+endmodule
+
+module mergeBoard(board_in, movDir, movable, board_after);
+    input [79:0] board_in;
+    input [1:0] movDir;
+    output movable;
+    output [79:0] board_after;
+    wire [79:0] rotated, merged;
+    wire movable0, movable1, movabl2 movable3;
+    rotateBoard rb(.X_all(board_in), .Y_all(rotated), .dir(movDir));
+    logic2048SingleLine logicL0(x0(rotated[4:0]), x1(rotated[9:5]), x2(rotated[14:10]), x3(rotated[19:15]), y0(merged[4:0]), y1(merged[9:5]), y2(merged[14:10]), y3(merged[19:15]), .movable(movable0));
+    logic2048SingleLine logicL1(x0(rotated[24:20]), x1(rotated[29:25]), x2(rotated[34:30]), x3(rotated[39:35]), y0(merged[24:20]), y1(merged[29:25]), y2(merged[34:30]), y3(merged[39:35]), .movable(movable1));
+    logic2048SingleLine logicL2(x0(rotated[44:40]), x1(rotated[49:45]), x2(rotated[54:50]), x3(rotated[59:55]), y0(merged[44:40]), y1(merged[49:45]), y2(merged[54:50]), y3(merged[59:55]), ), .movable(movable2));
+    logic2048SingleLine logicL3(x0(rotated[64:60]), x1(rotated[69:65]), x2(rotated[74:70]), x3(rotated[79:75]), y0(merged[64:60]), y1(merged[69:65]), y2(merged[74:70]), y3(merged[79:75]), .movable(movable3));
+    unRotateBoard urb(.X_all(merged), .Y_all(board_after), dir(movDir));
+    assign movable = movable0 | movable1 | movable2 | movable3;
 endmodule
 
 module rotateBoard(X_all, Y_all, dir);
@@ -195,8 +213,8 @@ module unRotateBoard(X_all, Y_all, dir);
 endmodule
 
 module logic2048SingleLine(x0, x1, x2, x3, y0, y1, y2, y3, movable);
-    input [3:0] x0, x1, x2, x3;
-    output reg [3:0] y0, y1, y2, y3;
+    input [4:0] x0, x1, x2, x3;
+    output reg [4:0] y0, y1, y2, y3;
     output reg movable;
     always @* begin
         if (x0 == 0 && x1 == 0 && x2 == 0 && x3 != 0) begin
@@ -213,7 +231,7 @@ module logic2048SingleLine(x0, x1, x2, x3, y0, y1, y2, y3, movable);
             movable <= 1;
         end else if (x0 == 0 && x1 != 0 && x2 == 0 && x3 == 0) begin
             y0 <= x1;
-            y1 <= 0;
+            1 <= 0;
             y2 <= 0;
             y3 <= 0;
             movable <= 1;

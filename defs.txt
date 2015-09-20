@@ -1,0 +1,4 @@
+logic2048SingleLine logicL0(x0(rotated[4:0]), x1(rotated[9:5]), x2(rotated[14:10]), x3(rotated[19:15]), y0(merged[4:0]), y1(merged[9:5]), y2(merged[14:10]), y3(merged[19:15]), );
+logic2048SingleLine logicL1(x0(rotated[24:20]), x1(rotated[29:25]), x2(rotated[34:30]), x3(rotated[39:35]), y0(merged[24:20]), y1(merged[29:25]), y2(merged[34:30]), y3(merged[39:35]), );
+logic2048SingleLine logicL2(x0(rotated[44:40]), x1(rotated[49:45]), x2(rotated[54:50]), x3(rotated[59:55]), y0(merged[44:40]), y1(merged[49:45]), y2(merged[54:50]), y3(merged[59:55]), );
+logic2048SingleLine logicL3(x0(rotated[64:60]), x1(rotated[69:65]), x2(rotated[74:70]), x3(rotated[79:75]), y0(merged[64:60]), y1(merged[69:65]), y2(merged[74:70]), y3(merged[79:75]), );

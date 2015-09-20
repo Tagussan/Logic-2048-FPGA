@@ -1,3 +1,17 @@
+module select2From8(X_all, pos, ans);
+    input [7:0] X_all;
+    input [1:0] pos;
+    output reg [1:0] ans;
+    always @* begin
+        case (pos)
+            0: ans <= X_all[1:0];
+            1: ans <= X_all[3:2];
+            2: ans <= X_all[5:4];
+            3: ans <= X_all[7:6];
+        endcase
+    end
+end
+
 module select4From64(X_all, pos, ans);
     input [63:0] X_all;
     input [3:0] pos;
