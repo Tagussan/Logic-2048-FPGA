@@ -10,7 +10,7 @@ module select2From8(X_all, pos, ans);
             3: ans <= X_all[7:6];
         endcase
     end
-end
+endmodule
 
 module select4From64(X_all, pos, ans);
     input [63:0] X_all;

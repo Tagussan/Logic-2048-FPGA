@@ -1,5 +1,5 @@
-MAIN = fillEmptyCellBySeq
-BENCH = tb_fillEmptyCellBySeq
+MAIN = fillEmptyCell
+BENCH = tb_fillEmptyCell
 SOURCES = *.v
 VERILOG = iverilog
 WAVE = gtkwave
