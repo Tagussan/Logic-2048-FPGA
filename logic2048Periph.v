@@ -32,10 +32,10 @@ module mergeBoard(board_in, movDir, movable, board_after);
     wire movable0, movable1, movabl2, movable3;
     rotateBoard rb(.X_all(board_in), .Y_all(rotated), .dir(movDir));
     unRotateBoard urb(.X_all(merged), .Y_all(board_after), .dir(movDir));
-    logic2048SingleLine logicL0(.x0(rotated[4:0]), .x1(rotated[9:5]), .x2(rotated[14:10]), .x3(rotated[19:15]), .y0(merged[4:0]), .y1(merged[9:5]), .y2(merged[14:10]), .y3(merged[19:15]));
-    logic2048SingleLine logicL1(.x0(rotated[24:20]), .x1(rotated[29:25]), .x2(rotated[34:30]), .x3(rotated[39:35]), .y0(merged[24:20]), .y1(merged[29:25]), .y2(merged[34:30]), .y3(merged[39:35]));
-    logic2048SingleLine logicL2(.x0(rotated[44:40]), .x1(rotated[49:45]), .x2(rotated[54:50]), .x3(rotated[59:55]), .y0(merged[44:40]), .y1(merged[49:45]), .y2(merged[54:50]), .y3(merged[59:55]));
-    logic2048SingleLine logicL3(.x0(rotated[64:60]), .x1(rotated[69:65]), .x2(rotated[74:70]), .x3(rotated[79:75]), .y0(merged[64:60]), .y1(merged[69:65]), .y2(merged[74:70]), .y3(merged[79:75]));
+    logic2048SingleLine logicL0(.x0(rotated[4:0]), .x1(rotated[9:5]), .x2(rotated[14:10]), .x3(rotated[19:15]), .y0(merged[4:0]), .y1(merged[9:5]), .y2(merged[14:10]), .y3(merged[19:15]), .movable(movable0));
+    logic2048SingleLine logicL1(.x0(rotated[24:20]), .x1(rotated[29:25]), .x2(rotated[34:30]), .x3(rotated[39:35]), .y0(merged[24:20]), .y1(merged[29:25]), .y2(merged[34:30]), .y3(merged[39:35]), .movable(movable1));
+    logic2048SingleLine logicL2(.x0(rotated[44:40]), .x1(rotated[49:45]), .x2(rotated[54:50]), .x3(rotated[59:55]), .y0(merged[44:40]), .y1(merged[49:45]), .y2(merged[54:50]), .y3(merged[59:55]), .movable(movable2));
+    logic2048SingleLine logicL3(.x0(rotated[64:60]), .x1(rotated[69:65]), .x2(rotated[74:70]), .x3(rotated[79:75]), .y0(merged[64:60]), .y1(merged[69:65]), .y2(merged[74:70]), .y3(merged[79:75]), .movable(movable3));
     assign movable = movable0 | movable1 | movable2 | movable3;
 endmodule
 
@@ -198,7 +198,13 @@ module logic2048SingleLine(x0, x1, x2, x3, y0, y1, y2, y3, movable);
     output reg [4:0] y0, y1, y2, y3;
     output reg movable;
     always @* begin
-        if (x0 == 0 && x1 == 0 && x2 == 0 && x3 != 0) begin
+        if (x0 == 0 && x1 == 0 && x2 == 0 && x3 == 0) begin
+            y0 <= 0;
+            y1 <= 0;
+            y2 <= 0;
+            y3 <= 0;
+            movable <= 0;
+        end else if (x0 == 0 && x1 == 0 && x2 == 0 && x3 != 0) begin
             y0 <= x3;
             y1 <= 0;
             y2 <= 0;
@@ -439,10 +445,10 @@ module logic2048SingleLine(x0, x1, x2, x3, y0, y1, y2, y3, movable);
             y3 <= 0;
             movable <= 1;
         end else begin
-            y0 <= 31;//for debug
+            y0 <= 31;
             y1 <= 31;
             y2 <= 31;
-            y3 <= 31;
+            y3 <= 31;//for debug. replace xxxx when deploy
         end
     end
 endmodule
