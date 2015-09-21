@@ -7,13 +7,11 @@ module logic2048(clk, rst, calc_done, random, initial_board, restrected, restrec
     input random;
     input [79:0] initial_board;
     wire [79:0] filledBoard, storedBoard, mergedBoard;
-    wire [63:0] perm16;
     wire ramClk, fillDone, rstFill, movable;
     wire [7:0] movSeq;
     wire [1:0] movDir;
     reg [1:0] movDirP;
-    fillEmptyCellBySeq boardFill(.rst(rstFill), .clk(clk), .cell_all_in(storedBoard), .cell_all_out(filledBoard), .order_all(perm16), .random(), .calc_done(fillDone));
-    randomPerm16 permGen16(.rst(rst), .clk(clk), .random(), .seq_all(perm16));
+    fillEmptyCell boardFill(.cell_all_in(storedBoard), .cell_all_out(filledBoard), .random_pos(), .random_prob(), .calc_done(fillDone));
     boardRam ram(.board_all(storedBoard), .clk(ramClk), .rst(rst), .data_in(mergedBoard));
     restrectedMovSeq movGen(.restrected(restrected), .prob(restrectProb), .random(), .outSeq(movSeq));
     mergeBoard mBoard(.board_in(filledBoard), .movDir(movDir), .movable(movable), .board_after(mergedBoard));
