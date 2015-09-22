@@ -1,6 +1,6 @@
-MAIN = mergeBoard
-BENCH = tb_mergeBoard
-SOURCES = *.v
+MAIN = logic2048
+BENCH = tb_logic2048
+SOURCES = random-seq-gen/*.v *.v
 VERILOG = iverilog
 WAVE = gtkwave
 

@@ -1,0 +1,3 @@
+[submodule "random-seq-gen"]
+	path = random-seq-gen
+	url = https://github.com/Tagussan/random-seq-gen.git

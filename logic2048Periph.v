@@ -1,3 +1,22 @@
+module selectBoard(num, X0_all, X1_all, X2_all, Y_all);
+    input [1:0] num;
+    input [79:0] X0_all, X1_all, X2_all;
+    output [79:0] Y_all;
+    function [79:0] sel;
+        input [1:0] which;
+        input [79:0] a;
+        input [79:0] b;
+        input [79:0] c;
+        case (which)
+            2'd0: sel = a;
+            2'd1: sel = b;
+            2'd2: sel = c;
+            default: sel = c;
+        endcase
+    endfunction
+    assign Y_all = sel(num, X0_all, X1_all, X2_all);
+endmodule
+
 module fillEmptyCell(cell_all_in, cell_all_out, random_pos, random_prob, calc_done);
     input [79:0] cell_all_in;
     output reg [79:0] cell_all_out;
