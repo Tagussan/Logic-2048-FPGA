@@ -44,12 +44,14 @@ module logic2048(clk, rst, calc_done, random, random_clk, initial_board, restrec
                 storeSelect <= 1;
                 movDirP <= 0;
                 state <= 2;
-            end else if(fillDone == 1 && state == 2) begin
-                ramClk <= 1; //write when posedge clk
-                state <= 3;
-            end else begin
+            end else if(state == 2) begin
+                if(fillDone == 1) begin
+                    ramClk <= 1; //write when posedge clk
+                    state <= 3;
+                end else begin
                 //wait for filling
-                random_clk <= 1;
+                    random_clk <= 1;
+                end
             end
             if(state == 3) begin
                 if(movDirP != 2'd3) begin
@@ -66,13 +68,15 @@ module logic2048(clk, rst, calc_done, random, random_clk, initial_board, restrec
                     end else begin
                         stuck <= 1;
                         calc_done <= 1;
-                        state <= 6;
+                        state <= 5;
                     end
                 end
             end else if(state == 4) begin
                 ramClk <= 1;
                 calc_done <= 1;
                 state <= 1;
+            end else begin
+
             end
         end
     end

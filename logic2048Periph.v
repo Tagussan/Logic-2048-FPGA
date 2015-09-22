@@ -468,6 +468,7 @@ module logic2048SingleLine(x0, x1, x2, x3, y0, y1, y2, y3, movable);
             y1 <= 31;
             y2 <= 31;
             y3 <= 31;//for debug. replace xxxx when deploy
+            movable <= 1;
         end
     end
 endmodule
