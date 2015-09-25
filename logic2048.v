@@ -3,7 +3,8 @@ module logic2048(clk, rst, calc_done, random, random_clk, initial_board, restrec
     input [1:0] restrected;
     input [2:0] restrect_prob;
     output calc_done, stuck, random_clk;
-    reg calc_done, stuck, random_clk;
+    reg calc_done, stuck, random_clkEn;
+    assign random_clk = random_clkEn & (~clk);
     input [22:0] random;
     input [79:0] initial_board;
     output [79:0] filledBoard, storedBoard, mergedBoard;//for debug
@@ -15,11 +16,11 @@ module logic2048(clk, rst, calc_done, random, random_clk, initial_board, restrec
     wire [7:0] movSeq;
     wire [1:0] movDir;
     reg [1:0] movDirP;
-    reg ramClk;
+    reg ramEn, negClk;
     reg [2:0] state;
     reg [1:0] storeSelect;
     fillEmptyCell boardFill(.cell_all_in(storedBoard), .cell_all_out(filledBoard), .random_pos(random[3:0]), .random_prob(random[9:4]), .calc_done(fillDone));
-    boardRam ram(.clk(ramClk), .wren(1'b1), .data(ramIn), .q(storedBoard));
+    boardRam ram(.clk(~clk), .wren(ramEn), .data(ramIn), .q(storedBoard));
     restrectedMovSeq movGen(.restrected(restrected), .prob(restrect_prob), .random(random[22:10]), .outSeq(movSeq));
     mergeBoard mBoard(.board_in(storedBoard), .movDir(movDir), .movable(movable), .board_after(mergedBoard));
     select2From8 selDir(.X_all(movSeq), .pos(movDirP), .ans(movDir));
@@ -30,30 +31,33 @@ module logic2048(clk, rst, calc_done, random, random_clk, initial_board, restrec
             calc_done <= 0;
             stuck <= 0;
             storeSelect <= 0;
-            ramClk <= 0;
-            random_clk <= 0;
+            ramEn <= 0;
+            random_clkEn <= 0;
             state <= 0;
         end else begin
             if(state == 0) begin
                 calc_done <= 0;
                 stuck <= 0;
-                ramClk <= 1;
+                ramEn <= 1;
                 state <= 1;
             end else if(state == 1) begin
                 calc_done <= 0;
+                ramEn <= 0;
                 storeSelect <= 1;
                 movDirP <= 0;
                 state <= 2;
             end else if(state == 2) begin
                 if(fillDone == 1) begin
-                    ramClk <= 1; //write when posedge clk
+                    ramEn <= 1; //write when posedge clk
                     state <= 3;
+                    random_clkEn <= 0;
                 end else begin
                 //wait for filling
-                    random_clk <= 1;
+                    random_clkEn <= 1;
                 end
             end
             if(state == 3) begin
+                ramEn <= 0;
                 if(movDirP != 2'd3) begin
                     if (movable) begin
                         storeSelect <= 2;
@@ -72,16 +76,12 @@ module logic2048(clk, rst, calc_done, random, random_clk, initial_board, restrec
                     end
                 end
             end else if(state == 4) begin
-                ramClk <= 1;
+                ramEn <= 1;
                 calc_done <= 1;
                 state <= 1;
             end else begin
 
             end
         end
-    end
-    always @(negedge clk) begin
-        ramClk <= 0;
-        random_clk <= 0;
     end
 endmodule
