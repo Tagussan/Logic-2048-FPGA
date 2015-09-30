@@ -1,4 +1,4 @@
-module logic2048(clk, rst, calc_done, random, random_clk, initial_board, restrected, restrect_prob, stuck, filledBoard, storedBoard, mergedBoard, state, random_clk);
+module logic2048(clk, rst, calc_done, random, random_clk, initial_board, restrected, restrect_prob, stuck/*, filledBoard, storedBoard, mergedBoard, state, random_clk*/);
     input clk, rst;
     input [1:0] restrected;
     input [2:0] restrect_prob;
